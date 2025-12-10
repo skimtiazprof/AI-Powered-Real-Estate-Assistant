@@ -1,0 +1,1571 @@
+{
+  "name": "Bukhari Real Estate",
+  "nodes": [
+    {
+      "parameters": {
+        "formId": "GGchHSKk"
+      },
+      "type": "n8n-nodes-base.typeformTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -2864,
+        -16
+      ],
+      "id": "8974416b-cdd4-4c41-89f0-6606dbf35381",
+      "name": "Typeform Trigger",
+      "webhookId": "6a28bbfd-7218-4f6b-bba0-60af92af17fd",
+      "credentials": {
+        "typeformApi": {
+          "id": "5grK3e0Bc50j3EYb",
+          "name": "Typeform account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a lead qualifier expert. Your task is to qualify real estate leads depending on their answers in the pre-qualifier form.\n\n## Criteria for qualification\n- Budget Must be 10000000 or more\n- Must be in one of the target markets: Lahore, Islamabad, or karachi\n- Must select: Multi-family, single, or Investment Property\n- Must plan to buy within less than 6 months\n- Must be “Yes” or “No”\n- Must not already be working with another agent\n\nOnly output the result: Yes / No. \n\nThe responses from the form:{{ JSON.stringify($json.data[0]) }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.6,
+      "position": [
+        -2464,
+        -16
+      ],
+      "id": "1a85878c-6adf-45ca-ae98-4ec8e36d0824",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -2624,
+        160
+      ],
+      "id": "53224d5b-bfd2-4bc6-9a27-d606a0b5e5c3",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "iZdN75vYZDZY6kf1",
+          "name": "OpenAi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1ecs98S5t0ay5rbWpBOfCkVxJQ2qPRqOlm0LZYVGjTEM",
+          "mode": "list",
+          "cachedResultName": "Real Estate Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ecs98S5t0ay5rbWpBOfCkVxJQ2qPRqOlm0LZYVGjTEM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ecs98S5t0ay5rbWpBOfCkVxJQ2qPRqOlm0LZYVGjTEM/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "First Name": "={{ $('Typeform Trigger').item.json['First name'] }}",
+            "Last Name": "={{ $('Typeform Trigger').item.json['Last name'] }}",
+            "Email": "={{ $('Typeform Trigger').item.json.Email }}",
+            "Phone Number": "={{ $('Typeform Trigger').item.json['Phone number'] }}",
+            "With agent": "={{ $('Typeform Trigger').item.json['Are you currently working with a real estate agent?'] }}",
+            "Company": "={{ $('Typeform Trigger').item.json.Company }}",
+            "Budget": "={{ $('Typeform Trigger').item.json['What is your budget range?'] }}",
+            "Location": "={{ $('Typeform Trigger').item.json['Where are you looking to purchase a property?'] }}",
+            "Property type": "={{ $('Typeform Trigger').item.json['What type of property are you interested in?'] }}",
+            "Timeframe": "={{ $('Typeform Trigger').item.json['What do you plan to purchase a property?'] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "First Name",
+              "displayName": "First Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Last Name",
+              "displayName": "Last Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone Number",
+              "displayName": "Phone Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "With agent",
+              "displayName": "With agent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Budget",
+              "displayName": "Budget",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Location",
+              "displayName": "Location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Property type",
+              "displayName": "Property type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Timeframe",
+              "displayName": "Timeframe",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -2144,
+        -16
+      ],
+      "id": "46334625-f3a3-43d8-b989-922dbb88aabd",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "mVCDbgpFb0WIjiNC",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -2640,
+        -16
+      ],
+      "id": "f1dcbae4-5c84-4625-b282-4ea6d6e3fae0",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "4e3f90b3-2ae6-4ab4-874f-214c76af4b91",
+              "leftValue": "={{ $('Basic LLM Chain').item.json.text }}",
+              "rightValue": "Yes",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1536,
+        -16
+      ],
+      "id": "aeb25a70-4ce3-4761-83d2-2df19b2532ba",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Input: JSON array of lead data\n// Example: \n// [\n//   {\n//     \"First name\": \"Khalid\",\n//     \"Last name\": \"Imtiaz\",\n//     \"Phone number\": \"+923000250708\",\n//     \"Email\": \"skimtiaz.prof@gmail.com\",\n//     \"Company\": \"bukhari\",\n//     \"Budget\": \"20000000-25000000\",\n//     \"Location\": \"Islamabad\",\n//     \"with agent\": \"No\",\n//     \"Property type\": \"Multi-family\",\n//     \"Timeframe\": \"1-3 months\"\n//   }\n// ]\n\nreturn items.map(item => {\n  const lead = item.json;\n  \n  const message = `\nHello ${lead[\"First name\"]} ${lead[\"Last name\"]} 👋,\n\nThank you for your interest in our properties at ${lead[\"Company\"]}.\n\nHere’s a summary of your preferences:\n- Budget: PKR ${lead[\"Budget\"]}\n- Location: ${lead[\"Location\"]}\n- Property Type: ${lead[\"Property type\"]}\n- Timeline: ${lead[\"Timeframe\"]}\n- Visiting with Agent: ${lead[\"with agent\"]}\n\nWe will review suitable properties for you and contact you shortly.\n\nFor any urgent queries, feel free to reach us at ${lead[\"Phone number\"]} or ${lead[\"Email\"]}.\n\nThank you for choosing us! 🏡\n`;\n\n  return {\n    json: {\n      phone: lead[\"Phone number\"],\n      confirmationMessage: message.trim()\n    }\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1136,
+        -32
+      ],
+      "id": "e27ed5a5-911f-4575-a80f-a197eca507f4",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Example lead data\nconst lead = $json; // Current item JSON\n\n// Convert timeframe to numeric months if needed\nlet months = parseInt(lead[\"Timeframe\"].split('-')[0]); // e.g., \"1-3 months\" -> 1\n\n// Convert budget to number\nlet budget = parseInt(lead[\"Budget\"].replace(/[^0-9]/g, ''));\n\n// Scoring logic\nlet status = \"\";\nif (budget >= 20000000 && months <= 3) {\n  status = \"Hot\";\n} else if (budget >= 15000000) {\n  status = \"Warm\";\n} else {\n  status = \"Cold\";\n}\n\n// Return result\nreturn [{\n  json: {\n    ...lead,\n    leadStatus: status // Add a new field with the score\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1872,
+        -16
+      ],
+      "id": "13ce3dd8-3074-4147-85cf-6dc4dd87d9e7",
+      "name": "leadStatus = \"Hot\", \"Warm\", or \"Cold\""
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Aggregate').item.json.data[0].Email }}",
+        "subject": "wellcome ",
+        "message": "={{ $json.confirmationMessage }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -768,
+        -32
+      ],
+      "id": "3ffae53c-9212-4524-80dd-8f6d7472d786",
+      "name": "Send a message",
+      "webhookId": "2c19f6a5-8c02-4b2b-9261-fb853725d323",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "NMDxFal1XCp990Mp",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1ecs98S5t0ay5rbWpBOfCkVxJQ2qPRqOlm0LZYVGjTEM",
+          "mode": "list",
+          "cachedResultName": "Real Estate Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ecs98S5t0ay5rbWpBOfCkVxJQ2qPRqOlm0LZYVGjTEM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ecs98S5t0ay5rbWpBOfCkVxJQ2qPRqOlm0LZYVGjTEM/edit#gid=0"
+        },
+        "event": "rowUpdate",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        -2912,
+        432
+      ],
+      "id": "79f98f88-53db-46ac-8474-066637be6455",
+      "name": "Google Sheets Trigger",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "YuW0W364JSmUsPjs",
+          "name": "Google Sheets Trigger account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a Real Estate Property Matching AI.\n\nYou have access to Google Sheets containing property listings.\nUse the Google Sheets tool to search the property sheet.\n\nClient information:\nName:{{ $json['First name'] }}\nBudget: {{ $json.Budget }}\nLocation: {{ $json.Location }}\nProperty Type: {{ $json['Property type'] }}\nTimeline: {{ $json.Timeframe }}\nEmail:{{ $json.Email }}\n\n\nYour task:\n1. Get all rows from the property sheet.\n2. Filter properties by:\n   - price <= budget\n   - location similar to client location\n   - type == client property type\n   - status == \"Available\"\n3. Return the best 3 matching properties in JSON format:\n   [\n     {\n       \"name\": \"\",\n       \"location\": \"\",\n       \"price\": \"\",\n       \"type\": \"\",\n       \"bedrooms\": \"\",\n       \"match_reason\": \"\"\n     }\n   ]\n\nIf no property matches:\nSuggest increasing budget or changing location.\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -2416,
+        448
+      ],
+      "id": "60dfdc7c-3287-47d2-9ce5-fcabd2fe50e3",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -2544,
+        624
+      ],
+      "id": "8a462cd9-3155-4fed-99c1-807aa32166de",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "iZdN75vYZDZY6kf1",
+          "name": "OpenAi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1jld91aqMnC5cZEEecDRhEDOvAmseKgt-jZ0S9c-u6C8",
+          "mode": "list",
+          "cachedResultName": "Property Search",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1jld91aqMnC5cZEEecDRhEDOvAmseKgt-jZ0S9c-u6C8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1655830962,
+          "mode": "list",
+          "cachedResultName": "Clients",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1jld91aqMnC5cZEEecDRhEDOvAmseKgt-jZ0S9c-u6C8/edit#gid=1655830962"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -2000,
+        592
+      ],
+      "id": "511a62d4-d9fb-4c87-974d-02882a53f43e",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "mVCDbgpFb0WIjiNC",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get input data from previous node\nconst input = $input.all()[0].json.output; // adjust path if needed\nconst properties = [\n  {\n    name: \"Property 1\",\n    location: \"Islamabad\",\n    price: 25000000,\n    type: \"Multi-family\",\n    bedrooms: 2,\n    match_reason: \"Matches budget, location, property type, and timeline\"\n  },\n  {\n    name: \"Property 2\",\n    location: \"Islamabad\",\n    price: 20000000,\n    type: \"Multi-family\",\n    bedrooms: 2,\n    match_reason: \"Matches budget, location, property type, and timeline\"\n  }\n];\n\n// Build HTML table dynamically\nlet tableRows = '';\nproperties.forEach(p => {\n  tableRows += `<tr>\n    <td>${p.name}</td>\n    <td>${p.location}</td>\n    <td>${p.price.toLocaleString()}</td>\n    <td>${p.type}</td>\n    <td>${p.bedrooms}</td>\n    <td>${p.match_reason}</td>\n  </tr>`;\n});\n\n// Get email dynamically from previous node\n// Replace 'Google Sheets Trigger' with the actual name of your previous node\nconst clientEmail = $input.all()[0].json.Email || $('Google Sheets Trigger').item.json.Email;\n\n// Get first name dynamically if available\nconst firstName = $input.all()[0].json['First name'] || $('Google Sheets Trigger').item.json['First name'] || \"Client\";\n\nconst htmlMessage = `\n<div style=\"font-family: Arial, sans-serif; color: #333; line-height: 1.5;\">\n  <h2 style=\"color:#1a73e8;\">Property Visit Details</h2>\n  <p>Dear <strong>${firstName}</strong>,</p>\n  <p>Based on your preferences, we found the following properties that match your criteria:</p>\n  <table style=\"width:100%; border-collapse: collapse;\">\n    <thead>\n      <tr>\n        <th style=\"border:1px solid #ddd;padding:8px;\">Property Name</th>\n        <th style=\"border:1px solid #ddd;padding:8px;\">Location</th>\n        <th style=\"border:1px solid #ddd;padding:8px;\">Price (PKR)</th>\n        <th style=\"border:1px solid #ddd;padding:8px;\">Type</th>\n        <th style=\"border:1px solid #ddd;padding:8px;\">Bedrooms</th>\n        <th style=\"border:1px solid #ddd;padding:8px;\">Match Reason</th>\n      </tr>\n    </thead>\n    <tbody>\n      ${tableRows}\n    </tbody>\n  </table>\n  <p>If you would like to schedule a visit, please click the button below to book a convenient time directly on our calendar:</p>\n  <p><a href=\"https://calendar.app.google/dzA68paSBrQsPiYL7\" target=\"_blank\" style=\"display:inline-block;padding:10px 20px;background:#1a73e8;color:#fff;text-decoration:none;border-radius:5px;\">Book Property Visit</a></p>\n  <p>Thank you for choosing our services.<br>Best regards,<br>Your Real Estate Team</p>\n</div>\n`;\n\n// Return two outputs: htmlMessage and the dynamic clientEmail\nreturn [{ json: { htmlMessage, email: clientEmail } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1792,
+        448
+      ],
+      "id": "7deb9295-3ec4-4efe-a95d-b6a467c998b5",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.email }}",
+        "subject": "=Schedule a Visit for Properties Matching Your Preferences",
+        "message": "={{ $json.htmlMessage }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -1248,
+        448
+      ],
+      "id": "9311a5a8-8ec0-41ef-93a8-4460389a7eff",
+      "name": "Send a message1",
+      "webhookId": "420c1d12-ad9e-4978-b4e1-6eb1171dacbb",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "NMDxFal1XCp990Mp",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -2928,
+        960
+      ],
+      "id": "e52c2e56-fd44-4c0c-a09d-7a7e0037e7ad",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "skimtiaz.prof@gmail.com",
+          "mode": "list",
+          "cachedResultName": "skimtiaz.prof@gmail.com"
+        },
+        "returnAll": true,
+        "timeMax": "={{ $now.plus({ hour: 1 }) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -2704,
+        960
+      ],
+      "id": "3aa75721-5f36-4726-9b05-ab39da754f22",
+      "name": "Google Calendar",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "60UjSpOWjJneD6IZ",
+          "name": "Google Calendar account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a Real Estate Appointment Assistant.\n\nYou will receive ONLY two inputs:\n- {{ $('Google Calendar').item.json.start.dateTime }}\n- {{ $('Google Calendar').item.json.end.dateTime }}\n\nYour task:\nWrite a polite, professional reminder message to send to the client exactly 1 hour before the visit.\n\nRules:\n- DO NOT assume client name or property details.\n- Use only the appointmentStart and appointmentEnd values.\n- Convert the values into a friendly human-readable format (e.g., \"10:30 AM, 12 December 2025\").\n- Keep the message short, polite, and clear.\n- Remind the client to be punctual.\n- Output ONLY the message, nothing else.\n\nExample style:\n\"Hello! This is a reminder for your scheduled property visit from {{ $('Google Calendar').item.json.start.dateTime }} to {{ $('Google Calendar').item.json.end.dateTime }}. Please be punctual. Thank you!\"\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.6,
+      "position": [
+        -2240,
+        864
+      ],
+      "id": "079d586d-2329-4c2b-882b-fbde391368b7",
+      "name": "Basic LLM Chain1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -2272,
+        1088
+      ],
+      "id": "e53aff0d-59c0-47b4-a6ce-2f97a70054e2",
+      "name": "OpenAI Chat Model2",
+      "credentials": {
+        "openAiApi": {
+          "id": "iZdN75vYZDZY6kf1",
+          "name": "OpenAi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "2b47f540-e575-4b45-9bdb-1f4ce29873d2",
+              "leftValue": "={{ $json.start.dateTime }}",
+              "rightValue": "={{ $now }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "afterOrEquals"
+              }
+            },
+            {
+              "id": "77858448-c080-46d1-b577-f5f1dc3e9901",
+              "leftValue": "={{ $json.start.dateTime }}",
+              "rightValue": "={{ $now.plus({ hour: 1 }) }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "before"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -2496,
+        960
+      ],
+      "id": "2e4f2486-ea93-4ba1-9331-5498d9377a84",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get input from previous node\nconst data = $input.all()[0].json;\n\n// Get reminder text from AI Agent output\nconst reminderText = data.text || \"This is a reminder for your property visit.\";\n\n// Get client email safely from input\nconst clientEmail = data.email || data.Email || \"no-email-found\";\n\n// Create professional HTML reminder\nconst htmlReminder = `\n<div style=\"font-family: Arial, sans-serif; color:#333; line-height:1.6;\">\n  <h2 style=\"color:#1a73e8;\">Appointment Reminder</h2>\n  <p>${reminderText}</p>\n  <p>Please be punctual to ensure a smooth property visit.</p>\n  <br>\n  <p>Best regards,<br>Your Real Estate Team</p>\n</div>\n`;\n\n// Return the outputs for Gmail node\nreturn [\n  {\n    json: {\n      htmlReminder,\n      email: clientEmail\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1744,
+        976
+      ],
+      "id": "9626b349-7a4f-4f97-830f-e69d31db14b9",
+      "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Google Calendar').item.json.creator.email }}",
+        "subject": "Your Scheduled Property Visit is in 1 Hour",
+        "message": "={{ $json.htmlReminder }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -1408,
+        976
+      ],
+      "id": "3b80d989-945f-4834-a931-5e666e4894f4",
+      "name": "Send a message2",
+      "webhookId": "5b9d69d5-3b47-48d0-8b80-38e0b6a60148",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "NMDxFal1XCp990Mp",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "n8n Workflow Short Notes – Appointment Reminder\n\nSchedule Trigger → Runs workflow hourly\n\nGoogle Calendar → Fetch upcoming events (next 1 hour)\n\nIf1 → Check if event is within 1-hour window\n\nOpenAI Chat Model2 → AI engine for reminder message\n\nBasic LLM Chain1 → Generate polite, professional reminder text\n\nCode in JavaScript2 → Build HTML email reminder & get client email\n\nSend a message2 → Send reminder email to client\n\nSticky Note1 → Workflow notes / reminders",
+        "height": 384,
+        "width": 512
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -3488,
+        848
+      ],
+      "typeVersion": 1,
+      "id": "740f5315-ac18-4d33-8f9d-fbc8ee7659ad",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 320,
+        "width": 2528,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -3072,
+        416
+      ],
+      "typeVersion": 1,
+      "id": "0de3edc6-3d04-4ec3-8536-632dcc0ce554",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "content": "n8n Workflow Short Notes\n\nGoogle Sheets Trigger → Watch lead sheet for updates\n\nAI Agent → Match client with available properties\n\nOpenAI Chat Model1 → AI engine for property matching\n\nGet row(s) in sheet in Google Sheets → Fetch client/property data from sheet\n\nCode in JavaScript1 → Build HTML property list & dynamic email\n\nSend a message1 → Send property matching email to client\n\nSticky Note1 → Workflow notes / reminders",
+        "height": 320,
+        "width": 512,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -3488,
+        416
+      ],
+      "typeVersion": 1,
+      "id": "f55f5414-3889-4b6e-8715-70c1c4e5211e",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 384,
+        "width": 2528
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2992,
+        848
+      ],
+      "typeVersion": 1,
+      "id": "2d806846-7731-4ef9-9635-658b41e0aab0",
+      "name": "Sticky Note12"
+    },
+    {
+      "parameters": {
+        "content": "n8n Workflow Short Notes\n\nTypeform Trigger → Capture leads from pre-qualification form\n\nAggregate → Combine lead responses into one dataset\n\nBasic LLM Chain → Qualify lead (Yes / No) using AI rules\n\nGoogle Sheets → Store lead details in spreadsheet\n\nleadStatus = \"Hot\", \"Warm\", or \"Cold\" → Score lead based on budget & timeline\n\nIf → Check if lead is qualified (Yes)\n\nCode in JavaScript → Generate personalized confirmation message\n\nSend a message → Email confirmation to client\n\nOpenAI Chat Model → AI engine for lead qualification\n\nSticky Note1 → Workflow notes / reminder",
+        "height": 448,
+        "width": 544,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -3488,
+        -160
+      ],
+      "typeVersion": 1,
+      "id": "a126913c-f241-48cc-8a1e-1bcc8b0927c6",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 448,
+        "width": 2976,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -3472,
+        -160
+      ],
+      "typeVersion": 1,
+      "id": "640fd749-b001-492c-a4ae-9ad981959655",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1ecs98S5t0ay5rbWpBOfCkVxJQ2qPRqOlm0LZYVGjTEM",
+          "mode": "list",
+          "cachedResultName": "Real Estate Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ecs98S5t0ay5rbWpBOfCkVxJQ2qPRqOlm0LZYVGjTEM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ecs98S5t0ay5rbWpBOfCkVxJQ2qPRqOlm0LZYVGjTEM/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Status"
+            }
+          ]
+        },
+        "options": {
+          "returnFirstMatch": true
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -2544,
+        1456
+      ],
+      "id": "ea28ef56-da56-4bac-aaf8-96100cde8e11",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "mVCDbgpFb0WIjiNC",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -2160,
+        1712
+      ],
+      "id": "44ae71d8-e59e-466e-b597-fcba42d9c085",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "AAoupAxOqc2Caa30",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"subject\": \"subject\",\n\t\"body\": \"body\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -1856,
+        1712
+      ],
+      "id": "269de07a-2f40-46e4-891e-cebebbe9ac29",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1ecs98S5t0ay5rbWpBOfCkVxJQ2qPRqOlm0LZYVGjTEM",
+          "mode": "list",
+          "cachedResultName": "Real Estate Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ecs98S5t0ay5rbWpBOfCkVxJQ2qPRqOlm0LZYVGjTEM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ecs98S5t0ay5rbWpBOfCkVxJQ2qPRqOlm0LZYVGjTEM/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $('Get row(s) in sheet').item.json.row_number }}",
+            "Status": "Sent",
+            "Time": ""
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "First Name",
+              "displayName": "First Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Last Name",
+              "displayName": "Last Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Phone Number",
+              "displayName": "Phone Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "With agent",
+              "displayName": "With agent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Budget",
+              "displayName": "Budget",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Location",
+              "displayName": "Location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Property type",
+              "displayName": "Property type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Timeframe",
+              "displayName": "Timeframe",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1424,
+        1472
+      ],
+      "id": "2999c6eb-044e-43e0-b6b2-c53bdbccdb87",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "mVCDbgpFb0WIjiNC",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 2,
+        "unit": "minutes"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -1184,
+        1472
+      ],
+      "id": "fb9bb676-d57f-40de-8f4b-f5c74a0aabb9",
+      "name": "Wait",
+      "webhookId": "f3df2f37-8bef-4bb4-9a4b-1fc8cc3ffd1d"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -2336,
+        1456
+      ],
+      "id": "5735731d-fdb9-4a53-bc24-da7315be4964",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Get row(s) in sheet').item.json.Email }}",
+        "subject": "={{ $json.output.subject }}",
+        "emailType": "text",
+        "message": "={{ $json.output.body }}",
+        "options": {
+          "appendAttribution": false,
+          "senderName": "Your_name"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -1632,
+        1472
+      ],
+      "id": "a203fe0a-84f0-4e9f-bf72-b7fb8a312ac1",
+      "name": "Send a message3",
+      "webhookId": "b289c85b-4f1e-4326-80a1-f4b7c16037a9",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "NMDxFal1XCp990Mp",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "months"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -2752,
+        1456
+      ],
+      "id": "f207fe90-4357-4f84-a033-f241a4630543",
+      "name": "Schedule Trigger1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Name:{{ $json['First Name'] }} {{ $json['Last Name'] }}\nPhone Number: {{ $json['Phone Number'] }}\nEmail: {{ $json.Email }}\nCompany: {{ $json.Company }}\nBudget: {{ $json.Budget }}\nLocation: {{ $json.Location }}\nTimeframe: {{ $json.Timeframe }}\nProperty type: {{ $json['Property type'] }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are an expert cold email writer with 15 years of experience. Your job is to generate short, personalised cold emails that propose real estate services to potential buyers, sellers, or investors.\nKeep the tone friendly, human generated, simple, and clear.\nAlways personalise the email using the details provided in the user prompt.\nAvoid generic lines.\nWrite the cold email in 4–5 lines max.\nFocus on how my real estate services can help them find the right property faster, sell for a better price, reduce hassle, and make smarter investment decisions.\nDo not add placeholders or brackets.\nProduce only the final email body with no introduction or explanation.\nAdd signature: Best, Bukhari"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -2048,
+        1472
+      ],
+      "id": "783a2527-ad25-4cb4-9595-cdc1049013bd",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "content": "Workflow checks Google Sheets for new leads and processes one lead at a time.\n\nAI Agent (Gemini) generates a personalised real-estate cold email using lead details.\n\nGmail node sends the email, then the workflow updates the lead’s Status = Sent in the sheet.\n\nWorkflow runs automatically every 1 minute via Schedule Trigger.",
+        "height": 480,
+        "width": 544,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -3488,
+        1376
+      ],
+      "typeVersion": 1,
+      "id": "b877972b-2bec-4b60-a33e-1931a8f0665a",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 480,
+        "width": 2496,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2944,
+        1376
+      ],
+      "typeVersion": 1,
+      "id": "e358b1b0-5a1d-4bfb-a59f-fd4168acc0fb",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "public": true,
+        "mode": "webhook",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -2576,
+        1872
+      ],
+      "id": "1e15777b-e9e4-462b-b86a-6ed41035b781",
+      "name": "When chat message received",
+      "webhookId": "915f9566-5f74-423b-aa64-8884a79a9a27"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are an AI Real Estate Assistant with 25 years of experience in dealing with clients professionally. Your goal is to engage website visitors in a friendly, polite, and professional manner to capture their basic information and guide them to fill a form for detailed assistance and appointment booking.  \n\nInstructions:  \n1. Greet the visitor warmly and introduce yourself as an experienced real estate assistant.  \n2. Ask for the visitor's first name and last name politely.  \n3. Ask for 1–2 key details about their interest (e.g., buying, selling, renting, or property preferences).  \n4. Keep your messages short, polite, and easy to understand.  \n5. After gathering basic info, guide the visitor to click the \"Get Started\" button and fill out the form for detailed assistance.  \n6. Reassure them that their appointment and queries will be handled 24/7 by your team.  \n7. Use a friendly, professional tone, avoiding too much technical jargon.  \n\nExample conversation flow:  \nAI: \"Hello! I’m your real estate assistant. May I know your name, please?\"  \nVisitor: \"Khalid Imtiaz\"  \nAI: \"Nice to meet you, Khalid! Could you briefly tell me what you’re interested in? Buying, selling, or renting a property?\"  \nVisitor: \"Buying a house\"  \nAI: \"Great! To assist you better, please click the 'Get Started' button and fill out the form. Our team will book your appointment and provide assistance 24/7.\""
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -2368,
+        1872
+      ],
+      "id": "7b5d0ca4-7f05-46cd-a2f1-a7571d306e5c",
+      "name": "AI Agent2"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -2512,
+        2080
+      ],
+      "id": "bdf572a0-9e52-4079-9e13-f6a5486740bc",
+      "name": "OpenAI Chat Model3",
+      "credentials": {
+        "openAiApi": {
+          "id": "iZdN75vYZDZY6kf1",
+          "name": "OpenAi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -2368,
+        2080
+      ],
+      "id": "a3c2490f-ddb0-4894-8842-5107bd2ad711",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 336,
+        "width": 624
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2656,
+        1856
+      ],
+      "typeVersion": 1,
+      "id": "bb993c0d-9d7f-494d-a8f4-041b6e9ac63d",
+      "name": "Sticky Note5"
+    }
+  ],
+  "pinData": {
+    "Typeform Trigger": [
+      {
+        "json": {
+          "First name": "Khalid",
+          "Last name": "Imtiaz",
+          "Phone number": "+923000250708",
+          "Email": "skimtiaz.prof@gmail.com",
+          "Company": "bukhari",
+          "What is your budget range?": "20000000-25000000",
+          "Where are you looking to purchase a property?": "Islamabad",
+          "What type of property are you interested in?": "Multi-family",
+          "What do you plan to purchase a property?": "1-3 months",
+          "Are you pre-approved for a mortgage?": "yes",
+          "Are you currently working with a real estate agent?": "No"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Typeform Trigger": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "leadStatus = \"Hot\", \"Warm\", or \"Cold\"",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "leadStatus = \"Hot\", \"Warm\", or \"Cold\"": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message1": {
+      "main": [
+        []
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Google Calendar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Calendar": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "Send a message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message3": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Send a message3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "fa461596-4e77-46ed-bdbf-cf466f1d892a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "45894b37f1d766687eb41e905a1ede6c1600e57f0ac4faa90c2f341924bdcb9d"
+  },
+  "id": "YoW6LiJsPSylKety",
+  "tags": []
+}
